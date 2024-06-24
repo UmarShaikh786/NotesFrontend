@@ -7,7 +7,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 // Set the Axios base URL once, outside of the component
-axios.defaults.baseURL = "http://localhost:5000/api";
+axios.defaults.baseURL = process.env.REACT_APP_BASE_URL;
 
 const Login = () => {
   const navigate = useNavigate();
