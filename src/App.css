@@ -1,12 +1,29 @@
 .App {
   text-align: center;
 }
-
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #343a40;
+  color: white;
+  text-align: center;
+  padding: 10px 0;
+}
 .App-logo {
   height: 40vmin;
   pointer-events: none;
 }
+.firstcard:hover{
+  background-color:lightgray
+}
+.secondcard:hover{
+  background-color:lightgray
+}
 
+.srcplaceholder{
+  color: white;
+}
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
