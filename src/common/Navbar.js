@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import { darkmode } from '../components/TotalNote';
@@ -6,16 +6,26 @@ import { darkmode } from '../components/TotalNote';
 function Navbar() {
   const location = useLocation();
   const [active, setActive] = useState(location.pathname);
+  const [checkedDarkMode,setcheckedDarkMode]=useState()
   // const [isDarkMode,setIsDarkMode]=useState(false)
     const dispatch=useDispatch()
-    const modeisEnable=useSelector((state)=>state.counter.mode)
+    const DarkToggle=useSelector((state)=>state.counter.mode)
+    useEffect(()=>{
+
+      const localDark=localStorage.getItem("dark-mode");
+      setcheckedDarkMode(localDark)
+    },[DarkToggle])
     const DarkModeEnable=()=>{
-      if(modeisEnable===false)
+      if(DarkToggle===false)
         {
-          
+          localStorage.setItem("dark-mode",true)
+          // setcheckedDarkMode(!checkedDarkMode)
           dispatch(darkmode(true));
         }
         else{
+          localStorage.removeItem("dark-mode")
+          // setcheckedDarkMode(!checkedDarkMode)
+
           dispatch(darkmode(false));
         }
     }
@@ -43,8 +53,8 @@ function Navbar() {
             
           </ul>
           <div className="form-check form-switch" >
-            <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" checked={modeisEnable} onClick={DarkModeEnable} style={{cursor:'pointer'}}/>
-            <label className="form-check-label me-4 text-white" htmlFor="flexSwitchCheckDefault">{modeisEnable? 'Dark Mode' : 'Light Mode'}</label>
+            <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" checked={checkedDarkMode} onClick={DarkModeEnable} style={{cursor:'pointer'}}/>
+            <label className="form-check-label me-4 text-white" htmlFor="flexSwitchCheckDefault">{checkedDarkMode? 'Dark Mode' : 'Light Mode'}</label>
 
           </div>
          

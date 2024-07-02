@@ -29,15 +29,30 @@ function Notes() {
   const dispatch = useDispatch();
   const location = useLocation();
   const subjects = ["Education", "General", "Religion", "Work", "Others"];
-  const modeIsEnable = useSelector((state) => state.counter.mode);
+  const DarkToggle = useSelector((state) => state.counter.mode);
+  const [modeisEnable,setmodeisEnable]=useState()
 
-  if (modeIsEnable) {
-    document.body.style.backgroundColor = "black";
-    document.body.style.color = "white";
-  } else {
-    document.body.style.backgroundColor = "white";
-    document.body.style.color = "black";
-  }
+  useEffect(()=>{
+    const modeisEnable=localStorage.getItem("dark-mode");
+    if(modeisEnable)
+      {
+        setmodeisEnable(true)
+        document.body.style.backgroundColor = "black";
+          document.body.style.color = "white";
+      }
+      else{
+        setmodeisEnable(false)
+        document.body.style.backgroundColor = "white";
+      document.body.style.color = "black";
+      }
+  },[modeisEnable,DarkToggle])
+  // if (modeisEnable) {
+  //   document.body.style.backgroundColor = "black";
+  //   document.body.style.color = "white";
+  // } else {
+  //   document.body.style.backgroundColor = "white";
+  //   document.body.style.color = "black";
+  // }
 
   useEffect(() => {
     document.getElementById('title').textContent = "Make-Notes " + location.pathname.split("/")[1];
@@ -96,15 +111,20 @@ function Notes() {
   };
 
   const handleDelete = async (id) => {
-    const res = await axios.delete(`/deletenote/${id}`);
-    if (res.data.status) {
-      toast.success("Note Deleted");
-      const newNotes = userNotes.filter((note) => note._id !== id);
-      setUserNotes(newNotes);
-      setFilteredNotes(newNotes);
-    } else {
-      toast.error("Failed to delete note");
-    }
+      const msgConfirm=window.confirm("Are you sure?")
+      if(msgConfirm)
+        {
+
+          const res = await axios.delete(`/deletenote/${id}`);
+          if (res.data.status) {
+              toast.success("Note Deleted");
+              const newNotes = userNotes.filter((note) => note._id !== id);
+              setUserNotes(newNotes);
+              setFilteredNotes(newNotes);
+            }}
+             else {
+                toast.error("Failed to delete note");
+              }
   };
 
   // const handleSave = async (id) => {
@@ -182,7 +202,7 @@ function Notes() {
           value={searchInput}
           onChange={handleSearch}
           placeholder="Search notes"
-          className={`form-control mb-4 ${modeIsEnable ? 'bg-black text-white' : ''}`}
+          className={`form-control mb-4 ${modeisEnable ? 'bg-black text-white' : ''}`}
         />
         <ToastContainer />
         {showModal && (
@@ -197,12 +217,12 @@ function Notes() {
           </div>
         ) : (
           <div className='row'>
-            {filteredNotes.map((note) => (
+            {filteredNotes.length>0?filteredNotes.map((note) => (
               <div className='col-lg-6 mb-3' key={note._id}>
-                <div className={`card ${modeIsEnable ? 'bg-black text-white border border-white' : ''}`}>
-                  <div className={`card-header d-flex justify-content-between ${modeIsEnable ? 'border border-white' : ''}`}>
-                    <span style={{ cursor: 'pointer' }} onClick={() => handleOpenEditModal(note)}><GoPencil color={`${modeIsEnable ? 'white' : 'blue'}`} /></span>
-                    <span style={{ cursor: 'pointer' }} onClick={() => handleDelete(note._id)}><GoTrash color={`${modeIsEnable ? 'white' : 'red'}`} /></span>
+                <div className={`card ${modeisEnable ? 'bg-black text-white border border-white' : ''}`}>
+                  <div className={`card-header d-flex justify-content-between ${modeisEnable ? 'border border-white' : ''}`}>
+                    <span style={{ cursor: 'pointer' }} onClick={() => handleOpenEditModal(note)}><GoPencil color={`${modeisEnable ? 'white' : 'blue'}`} /></span>
+                    <span style={{ cursor: 'pointer' }} onClick={() => handleDelete(note._id)}><GoTrash color={`${modeisEnable ? 'white' : 'red'}`} /></span>
                   </div>
                   <div className='card-body'>
                     <h5 className='card-title'>{note.subject}</h5>
@@ -218,7 +238,8 @@ function Notes() {
                   </div>
                 </div>
               </div>
-            ))}
+            ))
+          :<h5 className={`d-flex justify-content-center  align-item-center my-5 ${modeisEnable?'text-white':'text-black'}`}>Create a Notes to Click Add Note Button</h5>}
           </div>
         )}
       </div>

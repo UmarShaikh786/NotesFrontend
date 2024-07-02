@@ -23,20 +23,33 @@ function Profile() {
   const [updatedAvatar, setUpdatedAvatar] = useState('');
   const [userUpdateData, setUserUpdateData] = useState();
   const navigate = useNavigate();
-  const modeisEnable = useSelector((state) => state.counter.mode);
+  const DarkToggle = useSelector((state) => state.counter.mode);
+  const [modeisEnable,setModeisEnable]=useState()
   const location=useLocation()
   const dispatch=useDispatch()
   useEffect(() => {
     // document.body.title.="new"+location.pathname
     document.getElementById('title').textContent="Make-Notes "+location.pathname.split("/")[1]
     // console.log(location.pathname)
-    if (modeisEnable) {
-      document.body.style.backgroundColor = "black";
-      document.body.style.color = "white";
-    } else {
-      document.body.style.backgroundColor = "white";
+    // if (modeisEnable) {
+    //   document.body.style.backgroundColor = "black";
+    //   document.body.style.color = "white";
+    // } else {
+    //   document.body.style.backgroundColor = "white";
+    //   document.body.style.color = "black";
+    // }
+    const modeisEnable=localStorage.getItem("dark-mode");
+    if(modeisEnable)
+      {
+        setModeisEnable(true)
+        document.body.style.backgroundColor = "black";
+          document.body.style.color = "white";
+      }
+      else{
+        setModeisEnable(false)
+        document.body.style.backgroundColor = "white";
       document.body.style.color = "black";
-    }
+      }
     if (userUpdateData !== undefined) {
       localStorage.setItem("user-data", JSON.stringify(userUpdateData));
       toast.success("Profile Updated..");
@@ -49,7 +62,7 @@ function Profile() {
     } else {
       navigate("/login");
     }
-  }, [navigate, userUpdateData, modeisEnable]);
+  }, [navigate, userUpdateData, modeisEnable,DarkToggle]);
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -150,11 +163,13 @@ function Profile() {
             setUpdatedAvatar={setUpdatedAvatar}
           />
         )}
+        {
+        }
         <ToastContainer />
         <div className="container mt-5">
           <div className="row gap-2">
             <div className="col-md-6 col-lg-4">
-              <div className={`card ${modeisEnable ? 'bg-black text-white border border-white' : ''}`} style={{ width: "14rem" }}>
+              <div className={`card ${modeisEnable===true? 'bg-black text-white border border-white' : ''}`} style={{ width: "14rem" }}>
                 <div className="card-body firstcard">
                   <h5 className="card-title">Total Notes</h5>
                   <p className="card-text">{count}</p>

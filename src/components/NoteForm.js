@@ -1,18 +1,33 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 function NoteForm({ handleCloseModal, userData, userNotes,setUserNotes,subjects,setAddedNote }) {
   const navigate = useNavigate();
-  const modeisEnable=useSelector((state)=>state.counter.mode)
+  const DarkToggle=useSelector((state)=>state.counter.mode)
 console.log(userNotes)
   axios.defaults.baseURL = process.env.REACT_APP_BASE_URL;
   const [notedata, setnotedata] = useState({
     subject: userNotes?.subject || '',
     note: userNotes?.note || ''
   });
+  const [modeisEnable,setmodeisEnable]=useState()
 
+  useEffect(()=>{
+    const modeisEnable=localStorage.getItem("dark-mode");
+    if(modeisEnable)
+      {
+        setmodeisEnable(true)
+        document.body.style.backgroundColor = "black";
+          document.body.style.color = "white";
+      }
+      else{
+        setmodeisEnable(false)
+        document.body.style.backgroundColor = "white";
+      document.body.style.color = "black";
+      }
+  },[modeisEnable,DarkToggle])
   const handleOnChange = (e) => {
     setnotedata({ ...notedata, [e.target.name]: e.target.value });
   };

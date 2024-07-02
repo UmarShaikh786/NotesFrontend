@@ -5,8 +5,23 @@ import { useSelector } from 'react-redux';
 function EditProfile({ userData, setUserUpdateData,userUpdateData }) {
   const [editUserData, setEditUserData] = useState({ username: '', email: '' });
   axios.defaults.baseURL = process.env.REACT_APP_BASE_URL;
-  const modeisEnable = useSelector((state) => state.counter.mode);
+  const DarkToggle = useSelector((state) => state.counter.mode);
+  const [modeisEnable,setmodeisEnable]=useState()
 
+  useEffect(()=>{
+    const modeisEnable=localStorage.getItem("dark-mode");
+    if(modeisEnable)
+      {
+        setmodeisEnable(true)
+        document.body.style.backgroundColor = "black";
+          document.body.style.color = "white";
+      }
+      else{
+        setmodeisEnable(false)
+        document.body.style.backgroundColor = "white";
+      document.body.style.color = "black";
+      }
+  },[modeisEnable,DarkToggle])
   useEffect(() => {
     if (userData) {
       setEditUserData({

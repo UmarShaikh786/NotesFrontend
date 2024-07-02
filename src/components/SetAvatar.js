@@ -6,13 +6,30 @@ import avatar4 from '../Images/avatar4.png';
 import avatar5 from '../Images/avatar5.png';
 import avatar6 from '../Images/avatar6.png';
 import { useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
 
 function SetAvatar({selectedAvatar,setSelectedAvatar,editAvatar,seteditAvatar,userData,setUpdatedAvatar}) {
   axios.defaults.baseURL=process.env.REACT_APP_BASE_URL
 
   const avatarImages = [avatar1, avatar2, avatar3, avatar4, avatar5, avatar6];
-  const modeisEnable = useSelector((state) => state.counter.mode);
+  const DarkToggle = useSelector((state) => state.counter.mode);
 
+  const [modeisEnable,setmodeisEnable]=useState()
+
+  useEffect(()=>{
+    const modeisEnable=localStorage.getItem("dark-mode");
+    if(modeisEnable)
+      {
+        setmodeisEnable(true)
+        document.body.style.backgroundColor = "black";
+          document.body.style.color = "white";
+      }
+      else{
+        setmodeisEnable(false)
+        document.body.style.backgroundColor = "white";
+      document.body.style.color = "black";
+      }
+  },[modeisEnable,DarkToggle])
   const handleAvatarClick = (avatar) => {
     setSelectedAvatar(avatar);
     
